@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Previsão</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 60%;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin: 10px 0 5px;
+            font-size: 16px;
+            color: #333;
+        }
+        input {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .train-link {
+            text-decoration: none;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            display: inline-block;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        .train-link:hover {
+            background-color: #45a049;
+        }
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .prediction-result {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Previsão de Valor Imobiliário</h1>
+
+        <form method="POST" action="{{ url_for('make_prediction') }}">
+            <label for="sq_mt_built">Área Construída (m²):</label>
+            <input type="text" name="sq_mt_built" required>
+
+            <label for="sq_mt_useful">Área Útil (m²):</label>
+            <input type="text" name="sq_mt_useful" required>
+
+            <label for="n_rooms">Número de Quartos:</label>
+            <input type="text" name="n_rooms" required>
+
+            <label for="n_bathrooms">Número de Banheiros:</label>
+            <input type="text" name="n_bathrooms" required>
+
+            <label for="has_parking">Possui Estacionamento (1 = Sim, 0 = Não):</label>
+            <input type="text" name="has_parking" required>
+
+            <button type="submit">Fazer Previsão</button>
+        </form>
+
+        {% if prediction %}
+            <div class="prediction-result">
+                <h2>Resultado da Previsão: € {{ prediction | round(2) }}</h2>
+            </div>
+        {% endif %}
+        <br>
+        <a href="{{ url_for('index') }}" class="train-link">Voltar para a Página Inicial</a>
+    </div>
+
+</body>
+</html>

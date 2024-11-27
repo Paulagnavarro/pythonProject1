@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Análise de Dados</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        .statistics {
+            margin-top: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .table {
+            width: 100%;
+            max-width: 900px;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .table th, .table td {
+            padding: 8px 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+            font-size: 0.9em;
+        }
+        .table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .graphs img {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        .graphs .large-graph {
+            width: 80%;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+            margin-top: 20px;
+            border-radius: 8px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .train-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .train-link:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Análise de Dados</h1>
+
+        <!-- Estatísticas -->
+        <div class="statistics">
+            <h2>Estatísticas</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Coluna</th>
+                        <th>Contagem</th>
+                        <th>Único</th>
+                        <th>Média</th>
+                        <th>Desvio Padrão</th>
+                        <th>Mínimo</th>
+                        <th>25%</th>
+                        <th>50%</th>
+                        <th>75%</th>
+                        <th>Máximo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for column, stats in stats.items() %}
+                        <tr>
+                            <td><strong>{{ column }}</strong></td>
+                            <td>{{ stats.get('count', 'Não disponível') }}</td>
+                            <td>{{ stats.get('unique', 'Não disponível') }}</td>
+                            <td>{{ stats.get('mean', 'Não disponível') }}</td>
+                            <td>{{ stats.get('std', 'Não disponível') }}</td>
+                            <td>{{ stats.get('min', 'Não disponível') }}</td>
+                            <td>{{ stats.get('25%', 'Não disponível') }}</td>
+                            <td>{{ stats.get('50%', 'Não disponível') }}</td>
+                            <td>{{ stats.get('75%', 'Não disponível') }}</td>
+                            <td>{{ stats.get('max', 'Não disponível') }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+
+        <div class="graphs">
+            <h2>Gráficos de Distribuição</h2>
+            <h3>Distribuição do Preço de Compra</h3>
+            <img src="{{ url_for('static', filename='graphs/dist_price.png') }}" alt="Gráfico de Distribuição do Preço de Compra">
+
+            <h3>Distribuição da Área Construída</h3>
+            <img src="{{ url_for('static', filename='graphs/dist_sq_mt_built.png') }}" alt="Gráfico de Distribuição da Área Construída">
+
+            <h3>Distribuição do Número de Quartos</h3>
+            <img src="{{ url_for('static', filename='graphs/room_distribution.png') }}" alt="Gráfico de Distribuição do Número de Quartos">
+
+            <h3>Gráfico de Pizza: Distribuição do Número de Quartos</h3>
+            <img src="{{ url_for('static', filename='graphs/room_distribution_pie.png') }}" alt="Gráfico de Pizza de Distribuição do Número de Quartos">
+
+            <h3>Gráfico de Pizza: Distribuição de Estacionamento</h3>
+            <img src="{{ url_for('static', filename='graphs/parking_pie.png') }}" alt="Gráfico de Pizza de Distribuição do Número de Quartos">
+
+            <h3>Boxplot do Preço de Compra por Número de Quartos</h3>
+            <img src="{{ url_for('static', filename='graphs/price_boxplot.png') }}" alt="Boxplot do Preço de Compra por Número de Quartos">
+
+            <h3>Mapa de Calor das Correlações</h3>
+            <img src="{{ url_for('static', filename='graphs/correlation_heatmap.png') }}" class="large-graph" alt="Mapa de Calor das Correlações">
+
+            <h2>Gráficos Interativos</h2>
+            {% for title, graph_path in graphs.items() %}
+                <h3>{{ title }}</h3>
+                <iframe src="{{ url_for('static', filename='graphs/' + graph_path.split('/')[-1]) }}"></iframe>
+            {% endfor %}
+        </div>
+
+        <!-- Link para Treinar Modelo -->
+        <a href="{{ url_for('train') }}" class="train-link">Treinar Modelo</a>
+    </div>
+</body>
+</html>

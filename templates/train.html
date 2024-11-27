@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Treinamento do Modelo</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
+        .container { width: 80%; margin: 20px auto; padding: 20px; background-color: white; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+        h1, h2 { color: #333; }
+        label, select, input[type="text"], input[type="submit"], .predict-link { display: block; width: 100%; margin: 10px 0; padding: 10px; }
+        input[type="submit"] { width: 100%; padding: 15px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        input[type="submit"]:hover { background-color: #0056b3; }
+
+        .predict-link {
+            text-align: center;
+            padding: 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .predict-link:hover {
+            background-color: #218838;
+        }
+    </style>
+    <script>
+        function toggleParameters() {
+            var classifier = document.getElementById('classifier').value;
+            var maxDepthInput = document.getElementById('max_depth_input');
+            var nNeighborsInput = document.getElementById('n_neighbors_input');
+
+            if (classifier === 'DecisionTree') {
+                maxDepthInput.style.display = 'block';
+                nNeighborsInput.style.display = 'none';
+            } else if (classifier === 'KNN') {
+                maxDepthInput.style.display = 'none';
+                nNeighborsInput.style.display = 'block';
+            } else {
+                maxDepthInput.style.display = 'none';
+                nNeighborsInput.style.display = 'none';
+            }
+        }
+
+        window.onload = toggleParameters;
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Treinamento do Modelo</h1>
+        <form action="/train" method="POST">
+            <label for="classifier">Escolha o classificador:</label>
+            <select name="classifier" id="classifier" onchange="toggleParameters()">
+                <option value="LinearRegression">Regressão Linear</option>
+                <option value="DecisionTree">Árvore de Decisão</option>
+                <option value="KNN">KNN</option>
+            </select>
+
+            <div id="max_depth_input" style="display:none;">
+                <label for="max_depth">Profundidade da Árvore (para Decision Tree):</label>
+                <input type="text" name="max_depth">
+            </div>
+
+            <div id="n_neighbors_input" style="display:none;">
+                <label for="n_neighbors">Número de Vizinhos (para KNN):</label>
+                <input type="text" name="n_neighbors">
+            </div>
+
+            <input type="submit" value="Treinar">
+        </form>
+
+        {% if model_info %}
+            <h2>Modelo Treinado</h2>
+            <p>Classificador: {{ model_info.model_type }}</p>
+            <p>Erro Médio Absoluto (MAE): {{ model_info.mae }}</p>
+        {% endif %}
+
+        <!-- Exibir botão de previsão apenas se o modelo foi treinado -->
+        {% if model_trained %}
+            <a href="{{ url_for('make_prediction') }}" class="predict-link">Fazer Previsão</a>
+        {% endif %}
+
+       <form action="{{ url_for('retrain_model') }}" method="POST">
+            <button type="submit" class="btn btn-primary">Re-treinar Modelo</button>
+        </form>
+
+
+    </div>
+</body>
+</html>

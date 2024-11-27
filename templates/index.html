@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload CSV and Show Statistics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        form input[type="file"], form input[type="submit"] {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+        }
+        .statistics {
+            margin-top: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .table {
+            width: 100%;
+            max-width: 900px;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        .table th, .table td {
+            padding: 8px 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+            font-size: 0.9em; /* Diminuindo a fonte */
+        }
+        .table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+        .train-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .train-link:hover {
+            background-color: #0056b3;
+        }
+        .graph-container {
+            margin-top: 20px;
+        }
+        .graph-container h3 {
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+        .graph-container img {
+            width: 400px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Upload CSV</h1>
+        <form action="/" method="post" enctype="multipart/form-data">
+            <input type="file" name="file">
+            <input type="submit" value="Upload">
+        </form>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul>
+                    {% for category, message in messages %}
+                        <li class="alert alert-{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        {% if statistics %}
+            <div class="statistics">
+                <h2>Estatísticas</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Coluna</th>
+                            <th>Contagem</th>
+                            <th>Único</th>
+                            <th>Média</th>
+                            <th>Desvio Padrão</th>
+                            <th>Mínimo</th>
+                            <th>25%</th>
+                            <th>50%</th>
+                            <th>75%</th>
+                            <th>Máximo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for column, stats in statistics.items() %}
+                            <tr>
+                                <td><strong>{{ column }}</strong></td>
+                                <td>{{ stats.get('count', 'Não disponível') }}</td>
+                                <td>{{ stats.get('unique', 'Não disponível') }}</td>
+                                <td>{{ stats.get('mean', 'Não disponível') }}</td>
+                                <td>{{ stats.get('std', 'Não disponível') }}</td>
+                                <td>{{ stats.get('min', 'Não disponível') }}</td>
+                                <td>{{ stats.get('25%', 'Não disponível') }}</td>
+                                <td>{{ stats.get('50%', 'Não disponível') }}</td>
+                                <td>{{ stats.get('75%', 'Não disponível') }}</td>
+                                <td>{{ stats.get('max', 'Não disponível') }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <a href="{{ url_for('analyze') }}" class="train-link">Analisar Dados</a>
+            </div>
+        {% endif %}
+
+        {% if graphs %}
+            <div class="graph-container">
+                <h2>Gráficos</h2>
+                {% for graph_title, graph_path in graphs.items() %}
+                    <h3>{{ graph_title }}</h3>
+                    <img src="{{ graph_path }}" alt="Gráfico de {{ graph_title }}">
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

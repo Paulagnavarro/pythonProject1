@@ -1,0 +1,49 @@
+<html>
+<head>
+<title>analyze.html</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #d5b778;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bababa;}
+.s3 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+analyze.html</font>
+</center></td></tr></table>
+<pre><span class="s0">&lt;!DOCTYPE </span><span class="s2">html</span><span class="s0">&gt;</span>
+<span class="s0">&lt;html </span><span class="s2">lang</span><span class="s3">=&quot;en&quot;</span><span class="s0">&gt;</span>
+<span class="s0">&lt;head&gt;</span>
+    <span class="s0">&lt;meta </span><span class="s2">charset</span><span class="s3">=&quot;UTF-8&quot;</span><span class="s0">&gt;</span>
+    <span class="s0">&lt;title&gt;</span><span class="s1">Análise de Dados</span><span class="s0">&lt;/title&gt;</span>
+<span class="s0">&lt;/head&gt;</span>
+<span class="s0">&lt;body&gt;</span>
+    <span class="s0">&lt;h1&gt;</span><span class="s1">Análise de Dados</span><span class="s0">&lt;/h1&gt;</span>
+    <span class="s0">&lt;h2&gt;</span><span class="s1">Estatísticas</span><span class="s0">&lt;/h2&gt;</span>
+    <span class="s0">&lt;ul&gt;</span>
+        <span class="s1">{% for column, stats in stats.items() %}</span>
+            <span class="s0">&lt;li&gt;&lt;strong&gt;</span><span class="s1">{{ column }}</span><span class="s0">&lt;/strong&gt;</span><span class="s1">:</span><span class="s0">&lt;/li&gt;</span>
+            <span class="s0">&lt;ul&gt;</span>
+                <span class="s1">{% for key, value in stats.items() %}</span>
+                    <span class="s0">&lt;li&gt;&lt;strong&gt;</span><span class="s1">{{ key }}</span><span class="s0">&lt;/strong&gt;</span><span class="s1">: {{ value }}</span><span class="s0">&lt;/li&gt;</span>
+                <span class="s1">{% endfor %}</span>
+            <span class="s0">&lt;/ul&gt;</span>
+        <span class="s1">{% endfor %}</span>
+    <span class="s0">&lt;/ul&gt;</span>
+
+    <span class="s0">&lt;h2&gt;</span><span class="s1">Gráficos</span><span class="s0">&lt;/h2&gt;</span>
+    <span class="s1">{% for graph_title, graph_path in graphs.items() %}</span>
+        <span class="s0">&lt;h3&gt;</span><span class="s1">{{ graph_title }}</span><span class="s0">&lt;/h3&gt;</span>
+        <span class="s0">&lt;img </span><span class="s2">src</span><span class="s3">=&quot;{{ graph_path }}&quot; </span><span class="s2">alt</span><span class="s3">=&quot;Gráfico de {{ graph_title }}&quot; </span><span class="s2">style</span><span class="s3">=&quot;width:500px; height:auto;&quot;</span><span class="s0">&gt;</span>
+    <span class="s1">{% endfor %}</span>
+
+    <span class="s0">&lt;a </span><span class="s2">href</span><span class="s3">=&quot;{{ url_for('train') }}&quot;</span><span class="s0">&gt;</span><span class="s1">Treinar Modelo</span><span class="s0">&lt;/a&gt;</span>
+<span class="s0">&lt;/body&gt;</span>
+<span class="s0">&lt;/html&gt;</span>
+</pre>
+</body>
+</html>
